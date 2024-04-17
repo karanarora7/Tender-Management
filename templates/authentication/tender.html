@@ -1,0 +1,205 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login Page</title>
+   <!--Made with love by Mutiullah Samim -->
+   
+	<!--Bootsrap 4 CDN-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+    <!--Fontawesome CDN-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+	<!--Custom styles-->
+	<link rel="stylesheet" type="text/css" href="styles.css">
+    <script>
+        function clear_form() {
+            // Submit the form with an additional parameter 'clear'
+            var form = document.querySelector('form');
+            form.action += '?clear';
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role=alert>
+    <strong>Message:</strong>{{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label=""></button>
+    </div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+    {% include "authentication/navbar.html" %}
+    {% csrf_token %}
+    <h3 class="text-center my-3">All Tenders {{fname}}</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container">
+                            <form method="get"  class="row justify-content-center">
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.start_date.label_tag }}
+                                        {{ myFilter.form.start_date }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.end_date.label_tag }}
+                                        {{ myFilter.form.end_date }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.Remarks.label_tag }}
+                                        {{ myFilter.form.Remarks }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.Location.label_tag }}
+                                        {{ myFilter.form.Location }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.Hospital.label_tag }}
+                                        {{ myFilter.form.Hospital }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.Tender_number.label_tag }}
+                                        {{ myFilter.form.Tender_number }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.Product.label_tag }}
+                                        {{ myFilter.form.Product }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.Tender_Won_By.label_tag }}
+                                        {{ myFilter.form.Tender_Won_By }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-group">
+                                        {{ myFilter.form.Winning_Price.label_tag }}
+                                        {{ myFilter.form.Winning_Price }}
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="container text-center">
+                                    <button class="btn btn-primary" type="submit">
+                                        Search
+                                    </button>   
+                                    <button class="btn btn-secondary" type="button" onclick="clear_form()">Clear</button>
+                                </div>
+                            </form>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>SNo.</th>
+                                    <th>Hospital Name</th>
+                                    <th>Tender No.</th>
+                                    <th>Product</th>
+                                    <th>Location</th>
+                                    <th>Tender Won By</th>
+                                    <th>Winning Price</th>
+                                    <th>hospital remarks</th>
+                                    <th>Date</th>
+                                    <th>Active</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in tenders %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{t.Hospital}}</td>
+                                    <td>{{t.Tender_number}}</td>
+                                    <td>{{t.Product}}</td>
+                                    <td>{{t.Location}}</td>
+                                    <td>{{t.Tender_Won_By}}</td>
+                                    <td>{{t.Winning_Price}}</td>
+                                    <td>{{t.Remarks}}</td>
+                                    <td>{{t.Date}}</td>
+                                    <td>{{t.Active}}</td>
+                                    <td>
+                                        <a href="/tender/delete-tender/{{t.id}}" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                    <td>
+                                        <a href="/tender/update-tender/{{t.id}}" class="btn btn-dark btn-sm">Update</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    {% else %}
+    <div class="container">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Sign In</h3>
+                    <div class="d-flex justify-content-end social_icon">
+                        <span><i class="fab fa-facebook-square"></i></span>
+                        <span><i class="fab fa-google-plus-square"></i></span>
+                        <span><i class="fab fa-twitter-square"></i></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form action="/signin" method="post">
+                    {% csrf_token %}
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="username">
+                            
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" class="form-control" id="pass1" name="pass1" placeholder="password">
+                        </div>
+                        <div class="row align-items-center remember">
+                            <input type="checkbox">Remember Me
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="signin" class="btn float-right login_btn"> <a href="/signin"></a>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-center links">
+                        Don't have an account?<a href="/signup">Sign Up</a>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a href="#">Forgot your password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>
